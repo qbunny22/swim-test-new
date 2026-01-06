@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Iron Shark Swim Test</title>
+<style>
+body{
+  background:#eef2fb;
+  font-family:"Segoe UI",Arial;
+  padding:30px;
+}
+.sheet{
+  max-width:900px;
+  margin:auto;
+  background:#fff;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+  padding:28px;
+}
+.logo{text-align:center}
+.logo h1{margin:0;font-size:36px;color:#1f3c88;letter-spacing:2px}
+.logo small{color:#555}
+hr{border:none;border-top:2px solid #1f3c88;margin:18px 0}
+.frame{margin-bottom:24px}
+.title{font-size:20px;font-weight:bold;color:#1f3c88}
+.row{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px}
+input,select{padding:6px;border-radius:6px;border:1px solid #bbb}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th{background:linear-gradient(#355cbb,#1f3c88);color:#fff;padding:8px}
+td{border:1px solid #ddd;padding:6px;text-align:center}
+.cards{display:flex;gap:20px;margin-top:12px}
+.card{
+  flex:1;
+  background:linear-gradient(135deg,#e7efff,#fff);
+  border-radius:12px;
+  padding:14px;
+  text-align:center
+}
+.card strong{font-size:22px;color:#1f3c88}
+.compare{font-size:22px;font-weight:bold;color:green}
+.footer{text-align:center;margin-top:20px;color:#555;font-style:italic}
+</style>
+</head>
+
+<body>
+<div class="sheet">
+
+<div class="logo">
+  <img src="iron_shark_logo.png"
+       alt="Iron Shark Logo"
+       style="width:180px; margin-bottom:6px;">
+  <h1>IRON SHARK</h1>
+  <small>SWIM TRAINING · Performance · Discipline · Progress</small>
+</div>
+
+<hr>
+
+<div class="frame">
+  <div class="title">學生基本資料</div>
+  <div class="row">
+    姓名 <input>
+    日期 <input type="date">
+    教練 <input>
+  </div>
+  <div class="row">
+    比賽最佳成績 <input placeholder="1:27.3">
+    泳池
+    <select><option>短池</option><option>長池</option></select>
+  </div>
+</div>
+
+<div class="frame">
+  <div class="title">This Test</div>
+  <table>
+    <tr><th>#1</th><th>#2</th><th>#3</th><th>#4</th><th>#5</th></tr>
+    <tr>
+      <td><input class="this"></td><td><input class="this"></td>
+      <td><input class="this"></td><td><input class="this"></td>
+      <td><input class="this"></td>
+    </tr>
+  </table>
+  <div class="cards">
+    <div class="card">🥇 Best<br><strong id="tb">-</strong></div>
+    <div class="card">📊 Avg<br><strong id="ta">-</strong></div>
+  </div>
+</div>
+
+<div class="frame">
+  <div class="title">Last Test</div>
+  <table>
+    <tr><th>#1</th><th>#2</th><th>#3</th><th>#4</th><th>#5</th></tr>
+    <tr>
+      <td><input class="last"></td><td><input class="last"></td>
+      <td><input class="last"></td><td><input class="last"></td>
+      <td><input class="last"></td>
+    </tr>
+  </table>
+  <div class="cards">
+    <div class="card">🥇 Best<br><strong id="lb">-</strong></div>
+    <div class="card">📊 Avg<br><strong id="la">-</strong></div>
+  </div>
+</div>
+
+<div class="frame">
+  <div class="title">Progress Comparison</div>
+  <div class="cards">
+    <div class="card">Best Improvement<br><span class="compare" id="bd">-</span></div>
+    <div class="card">Avg Improvement<br><span class="compare" id="ad">-</span></div>
+  </div>
+</div>
+
+<div class="footer">
+Consistent effort turns today’s progress into tomorrow’s success.
+</div>
+
+</div>
+
+<script>
+const toSec=t=>{if(!t)return null;const p=t.split(':');return p.length==2?p[0]*60+ +p[1]:+t}
+const fmt=s=>`${Math.floor(s/60)}:${(s%60).toFixed(2).padStart(5,'0')}`
+const calc=c=>{
+  const v=[...document.querySelectorAll(c)].map(i=>toSec(i.value)).filter(x=>x)
+  if(!v.length)return null
+  return{b:Math.min(...v),a:v.reduce((x,y)=>x+y,0)/v.length}
+}
+document.querySelectorAll('input').forEach(i=>i.oninput=()=>{
+  const t=calc('.this'),l=calc('.last')
+  if(t){tb.textContent=fmt(t.b);ta.textContent=fmt(t.a)}
+  if(l){lb.textContent=fmt(l.b);la.textContent=fmt(l.a)}
+  if(t&&l){bd.textContent=`↓ ${(l.b-t.b).toFixed(2)}s`;ad.textContent=`↓ ${(l.a-t.a).toFixed(2)}s`}
+})
+</script>
+</body>
+</html>
